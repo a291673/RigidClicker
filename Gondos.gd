@@ -13,17 +13,30 @@ const VX = [[50,80], [90,120], [130,150], [150,180], [190,220]]
 const VY = [[30,60], [55,90], [80,120], [110,150], [150,190]]
 func _ready():
 	set_position(Vector2(rand_range(100,screensize.x-100),rand_range(100,screensize.y-100)))
-	set_process(true)
-	vel = Vector2(rand_range(0,100),rand_range(0,100)).rotated(rand_range(0.4, PI/2))
+	#set_process(true)
+	vel = Vector2(rand_range(-100,100),rand_range(-100,100))
+	impulse(Vector2(rand_range(-100,100),rand_range(-100,100)))
 	
-func _process(delta):
-	var pos = get_position()
-	pos += vel * delta
-	if pos.x >= 0 or pos.x <= -screensize.x:
-		set_position(Vector2(screensize.x-50,pos.y))
-		vel.x *= -1
-	if pos.y >= screensize.y-50 or pos.y<= 0:
-		set_position(Vector2(pos.x,screensize.y-110))
-		vel.y *= -1
-	set_position(pos)
+#func _process(delta):
 	
+	#var pos = get_position()
+	#pos += vel * delta
+	#if pos.x <= -25 or pos.x >= screensize.x-50:
+	#	set_position(Vector2(screensize.x-50,pos.y))
+	#	vel.x *= -1
+	#if pos.y >= screensize.y-50 or pos.y<= 0:
+	#	set_position(Vector2(pos.x,screensize.y-110))
+	#	vel.y *= -1
+	#set_position(pos)
+func impulse(amount):
+	self.apply_central_impulse(amount)
+	
+func _input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		if get_node("Sprite").get_rect().has_point(to_local(event.position)):
+			$kill.play()
+			
+
+
+func _on_kill_finished():
+	remove_child(id)
