@@ -1,12 +1,32 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://fonts/score.tres" type="DynamicFont" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var points = 0
+onready var screensize = get_viewport_rect().size
+
+func _ready():
+	set_process(true)
+
+func _process(delta):
+	points = get_node(\"Gondos\").get(\"score\")
+	$score_label.text = \"Score: \" + str(points)
+	set_position(Vector2(rand_range(50,screensize.x-50), rand_range(50,screensize.y-50)))
+"
 
 [node name="Score" type="Node2D"]
+script = SubResource( 1 )
 
-[node name="Label" type="Label" parent="."]
+[node name="score_label" type="Label" parent="."]
 margin_left = 233.472
 margin_top = 17.9594
 margin_right = 356.472
 margin_bottom = 76.9594
+custom_fonts/font = ExtResource( 2 )
+text = "Score: 0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
